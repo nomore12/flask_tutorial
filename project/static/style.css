@@ -1,3 +1,5 @@
-.color {
-    background-color: red;
+.container {
+  width: 1280px;
+  margin-top: 0px;
+  margin: auto;
 }
