@@ -14,58 +14,57 @@ from datetime import datetime
 '''
 
 
-def get_all_users():
-    # 그냥 다 가져옴
-    sql = "SELECT * FROM user ORDER BY id DESC;"
+# cursor.fetchall() 또는 cursor.fetchone()의 리턴 자료형이 튜플이라 템플릿에서 쓰기 애매함. 딕셔너리로 바꿔주는 함수. 개어려움
+def cursor_to_dictionary(query, many=True):
     conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    users = c.execute(sql).fetchall()
+    # https://docs.python.org/ko/3/library/sqlite3.html#row-objects
+    # sqlite3.Cursor 객체로 딕셔너리를 만들 수 있음.
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(query)
+    result = []
+    if many:
+        content = cursor.fetchall()
+        for row in content:
+            data = {}
+            # list loop에서 인덱스도 함께 쓰고 싶을때 index, value 형태로 쓰면 됨.
+            for index, key in enumerate(row.keys()):
+                data[key] = tuple(row)[index]
+            result.append(data)
+    else:
+        content = cursor.fetchone()
+        result = dict(content)
     conn.close()
+    return result
+
+
+def get_all_users():
+    sql = "SELECT * FROM user ORDER BY id DESC;"
+    users = cursor_to_dictionary(sql)
     return users
 
 
 def get_user(id):
     sql = f"SELECT * FROM user WHERE id = '{id}';"
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    user = cursor.execute(sql).fetchone()
-    conn.close()
+    user = cursor_to_dictionary(sql, False)
     return user
 
 
-# 개어려움
 def get_all_articles():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    # sql = 'SELECT * FROM article;'
+    # left outer join. article의 user_id를 이용해서 글을 작성한 유저의 정보를 찾음.
     sql = "SELECT atc.id, usr.username, atc.title, atc.created_at FROM article atc LEFT OUTER JOIN user usr ON atc.user_id = usr.id;"
-
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    content = cursor.fetchall()
-
-    result = []
-    for row in content:
-        data = {}
-        # list loop에서 인덱스도 함께 쓰고 싶을때 index, value 형태로 쓰면 됨.
-        for index, key in enumerate(row.keys()):
-            data[key] = tuple(row)[index]
-        result.append(data)
-
+    result = cursor_to_dictionary(sql)
     result = sorted(
         result, key=lambda e: e['id'], reverse=True
     )
-    conn.close()
+    print(result)
     return result
 
 
 def get_article(id):
     sql = f"SELECT id, title, content, created_at, (SELECT id FROM user WHERE user_id = id) as user_id FROM article WHERE id = '{id}';"
-
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    article = cursor.execute(sql).fetchone()
-    conn.close()
+    article = cursor_to_dictionary(sql, False)
+    print(article)
     return article
 
 
@@ -100,15 +99,4 @@ def create_article(user_id, title, content):
 
 
 # get_all_articles()
-# articles = get_all_articles()
-# article_dict = [{
-#     'created_at': item[3],
-#     'id': item[0],
-#     'username': item[1],
-#     'title': item[2],
-# } for item in articles]
-# print(type(article_dict))
-
-# for item in article_dict:
-#     print(type(item))
-#     print(item)
+# get_article(2)

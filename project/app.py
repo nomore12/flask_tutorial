@@ -10,25 +10,26 @@ def format_datetime(value):
     return value[11:16]
 
 
-def execute_query(query):
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    sql = cursor.execute(query).fetchall()
-    conn.close()
-    print(sql)
-    return sql
-
-
 @app.route('/')
 def index():
     articles = get_all_articles()
-    return render_template('list.html', context=articles)
+    user = get_user(1)
+    context = {
+        'user': user,
+        'articles': articles,
+    }
+    return render_template('list.html', context=context)
 
 
-@app.route('/list')
-def list_view():
-    data = get_all_articles()
-    return render_template('list.html', context=data)
+@app.route('/write')
+def create_article():
+    if request.method != 'POST':
+        return redirect('/write')
+
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+
+    pass
 
 
 if __name__ == '__main__':
