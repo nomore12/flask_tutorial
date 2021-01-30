@@ -18,38 +18,20 @@
       </div>
     </header>
     <div class="container">
-      <div class="sectioin">자유 게시판</div>
-        <span>{{context}}</span>
-      <div class="sectioin">
-        <ul class="board-list">
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-          <li class="list-item">
-            <a href="#" class="list-title">게시글 타이틀</a>
-          </li>
-        </ul>
-        <div class="bottom-nav">
-          <div class="empty nav-item"></div>
-          <div class="pagenation nav-item">123456</div>
-          <div class="create nav-item"></div>
+      <div class="divider"></div>
+      <div class="content">
+        <div class="sectioin">자유 게시판</div>
+        <div class="body">
+          <div class="content">{% block content %} {% endblock %}</div>
+          <div class="bottom-nav">
+            <div class="empty nav-item"></div>
+            <div class="pagenation nav-item">123456</div>
+            <div class="create nav-item"></div>
             <a href="/create" class="create-article">글쓰기</a>
           </div>
         </div>
       </div>
-      <footer class="footer">footer</footer>
     </div>
+    <footer class="footer">footer</footer>
   </body>
 </html>

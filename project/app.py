@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from query import get_all_articles, get_all_users, get_user, get_article
 
 app = Flask(__name__)
+
+
+@app.template_filter('today')
+def format_datetime(value):
+    return value[11:16]
 
 
 def execute_query(query):
@@ -12,11 +18,17 @@ def execute_query(query):
     print(sql)
     return sql
 
+
 @app.route('/')
 def index():
-    query = "select * from user;"
-    context = execute_query(query)
-    return render_template('base.html', context=context[0])
+    articles = get_all_articles()
+    return render_template('list.html', context=articles)
+
+
+@app.route('/list')
+def list_view():
+    data = get_all_articles()
+    return render_template('list.html', context=data)
 
 
 if __name__ == '__main__':
