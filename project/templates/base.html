@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% block head %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/reset.css" />
-    <link rel="stylesheet" href="/static/style.css" />
-    {% endblock %}
-
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/reset.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/colors.css') }}"
+    />
     <title>{% block title %}게시판{% endblock %}</title>
   </head>
   <body>
@@ -16,7 +23,7 @@
         <div class="divide-item"><div class="logo">logo</div></div>
         <div class="divide-item">
           <div class="login">로그인</div>
-          <div class="register">회원가입</div>
+          <a href="/register">회원가입</a>
         </div>
       </div>
     </header>
@@ -24,15 +31,16 @@
       <div class="divider"></div>
       <div class="content">
         <div class="sectioin">자유 게시판</div>
-        <div class="user">{{ context.user }}</div>
         <div class="body">
           <div class="content">{% block content %} {% endblock %}</div>
+          {% block bottom_nav %}
           <div class="bottom-nav">
             <div class="empty nav-item"></div>
             <div class="pagenation nav-item">123456</div>
             <div class="create nav-item"></div>
             <a href="/edit" class="create-article">글쓰기</a>
           </div>
+          {% endblock %}
         </div>
       </div>
     </div>

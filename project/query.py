@@ -57,30 +57,29 @@ def get_all_articles():
     result = sorted(
         result, key=lambda e: e['id'], reverse=True
     )
-    print(result)
     return result
 
 
 def get_article(id):
     sql = f"SELECT id, title, content, created_at, (SELECT id FROM user WHERE user_id = id) as user_id FROM article WHERE id = '{id}';"
     article = cursor_to_dictionary(sql, False)
-    print(article)
     return article
 
 
-def create_user(username, email):
+def create_user(username, email, password):
+    print(username, email, password)
     # 현재 시간을 문자열로 변환. "2021-01-30 12:53:37" 형태로 변환
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # f String의 {}안에 변수를 넣는 형태로 간단하게 쿼리문 작성. VALUES의 인자값에는 문자열이 들어간다고 방심하기 말고 {}밖에 따옴표를 꼭 넣어야 함...
-    sql = f"INSERT INTO user (username, email, created_at) \
-        VALUES ('{username}', '{email}', '{now}'); "
+    sql = f"INSERT INTO user (username, email, password, created_at) \
+        VALUES ('{username}', '{email}', '{password}', '{now}');"
 
     # 데이터베이스에 접속
     conn = sqlite3.connect('database.db')
-
     # 데이터베이스의 커서를 생성. 커서에 sql문을 삽입 후 데이터베이스 커넥션에서 커서의 sql문을 커밋(실행)
     cursor = conn.cursor()
+    # query를 실행한다.
     cursor.execute(sql)
+    # 실행한 쿼리를 적용한다.
     conn.commit()
     # 데이터베이스를 닫는다.
     conn.close()
@@ -89,14 +88,15 @@ def create_user(username, email):
 # create_user와 동일
 def create_article(user_id, title, content):
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    sql = f"INSERT INTO article (user_id, title, content, created_at) VALUES ((SELECT id FROM user WHERE id={user_id}), '{title}', '{content}', '{now}'); "
-    print(sql)
+    sql = f"INSERT INTO article (user_id, title, content, created_at) VALUES ((SELECT id FROM user WHERE id={user_id}), '{title}', '{content}', '{now}');"
+
+    # 데이터베이스에 접속
     conn = sqlite3.connect('database.db')
+    # 데이터베이스의 커서를 생성. 커서에 sql문을 삽입 후 데이터베이스 커넥션에서 커서의 sql문을 커밋(실행)
     cursor = conn.cursor()
+    # query를 실행한다.
     cursor.execute(sql)
+    # 실행한 쿼리를 적용한다.
     conn.commit()
+    # 데이터베이스를 닫는다.
     conn.close()
-
-
-# get_all_articles()
-# get_article(2)

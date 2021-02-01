@@ -10,6 +10,7 @@ conn.execute('CREATE TABLE user \
             (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \
             username VARCHAR(128) NOT NULL, \
             email VARCHAR(255) NOT NULL, \
+            password VARVARCHAR(255) NOT NULL, \
             created_at VARCHAR(64) NOT NULL);')
 
 conn.execute('CREATE TABLE article \
