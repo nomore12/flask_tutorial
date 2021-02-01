@@ -2,16 +2,18 @@
 <div class="list-wrapper">
   <ul class="list-group">
     {% for item in context.articles %}
-    <li class="list-item is-flex is-flex-direction-row is-flex-space-between">
+    <li
+      class="list-item is-flex is-flex-direction-row is-justify-content-space-between"
+    >
       <div class="list-divider">
         <span class="date">{{item.created_at|today}} |</span>
         <span class="title">{{item.title}}</span>
       </div>
       <div class="list-divider">
         <span class="list-item-divider">|</span>
-        <span class="is-flex-center">작성자: {{item.username}}</span>
+        <span class="is-justify-content-center">작성자: {{item.username}}</span>
         <span class="list-item-divider">|</span>
-        <span class="is-flex-center is-grey">조회수: 15</span>
+        <span class="is-justify-content-center is-grey">조회수: 15</span>
       </div>
     </li>
 

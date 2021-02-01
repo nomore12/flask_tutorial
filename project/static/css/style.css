@@ -6,6 +6,17 @@
   border: 1px solid grey;
 }
 
+.logo {
+  width: 72px;
+  height: auto;
+  background-size: contain;
+  padding: 0;
+}
+
+.logo-wrapper {
+  padding: 4px 8px;
+}
+
 .divider {
   padding: 10px 0px;
 }
@@ -18,7 +29,7 @@
   padding: 20px 0px;
 }
 
-.list-wrapper{
+.list-wrapper {
   border-top: 1px solid grey;
 }
 
@@ -27,20 +38,24 @@
   padding: 15px 10px;
 }
 
-.is-flex{
+.is-flex {
   display: flex;
 }
 
-.is-flex-direction-row{
-flex-direction: row;
+.is-flex-direction-row {
+  flex-direction: row;
 }
 
-.is-flex-space-between {
+.is-justify-content-space-between {
   justify-content: space-between;
 }
 
-.is-flex-center{
+.is-justify-content-center {
   justify-content: center;
+}
+
+.is-align-items-center {
+  align-items: center;
 }
 
 .dev-block {
@@ -48,6 +63,82 @@ flex-direction: row;
   width: 300px;
 }
 
-.list-item-divider{
+.list-item-divider {
   color: grey;
+}
+
+.py-1 {
+  padding: 0.5rem 0.5rem;
+}
+
+.btn {
+  text-align: center;
+  display: block;
+  min-width: 6rem;
+  min-height: 2rem;
+  padding: 0.74rem 0.6rem 0.07rem;
+  height: 2rem;
+  border-radius: 0.3rem;
+  background-color: white;
+  border: 2px solid grey;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.font-size-1 {
+  font-size: 1rem;
+}
+
+.font-size-2 {
+  font-size: 1.5rem;
+}
+.font-size-3 {
+  font-size: 2rem;
+}
+.font-size-4 {
+  font-size: 3rem;
+}
+.font-size-5 {
+  font-size: 4rem;
+}
+.font-size-6 {
+  font-size: 6rem;
+}
+
+.font-weight-100 {
+  font-weight: 100;
+}
+
+.font-weight-200 {
+  font-weight: 200;
+}
+
+.font-weight-300 {
+  font-weight: 300;
+}
+
+.font-weight-400 {
+  font-weight: 400;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.font-weight-600 {
+  font-weight: 600;
+}
+
+.font-weight-700 {
+  font-weight: 700;
+}
+
+.font-weight-800 {
+  font-weight: 800;
 }

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from query import get_all_articles, get_all_users, get_user, get_article, create_article, create_user
 from datetime import datetime
@@ -12,16 +12,32 @@ def format_datetime(value):
     return value[11:16]
 
 
+@app.route('/404')
+def http_404():
+    return render_template('http_404.html')
+
+
 @app.route('/')
 def index():
     articles = get_all_articles()
-    user = get_user(1)
+    if session.get("username", "") == "":
+        user = None
+    else:
+        try:
+            user = get_user(session.get('id', ''))
+        except Exception as e:
+            return redirect(url_for('.http_404', context={'message': e}))
     context = {
         'user': user,
         'articles': articles,
         'users': get_all_users(),
     }
     return render_template('list.html', context=context)
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 
 @app.route('/register', methods=['POST', 'GET'])

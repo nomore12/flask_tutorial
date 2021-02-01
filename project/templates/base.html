@@ -19,13 +19,41 @@
   </head>
   <body>
     <header class="header">
-      <div class="container">
-        <div class="divide-item"><div class="logo">logo</div></div>
-        <div class="divide-item">
-          <div class="login">로그인</div>
-          <a href="/register">회원가입</a>
+      <nav
+        class="navbar container is-flex is-flex-direction-row is-justify-content-space-between"
+      >
+        <div class="nav-item">
+          <div class="logo-wrapper">
+            <img
+              class="logo"
+              src="{{ url_for('static', filename='img/logo.jpg') }}"
+            />
+          </div>
         </div>
-      </div>
+        <div class="nav-item is-flex is-align-items-center">
+          <p class="center-logo font-size-4 font-weight-600">
+            <a href="/" class="link">I WANT TO BELIEVE</a>
+          </p>
+        </div>
+        {% block login %} {% if context.user == None %}
+        <div
+          class="nav-item is-flex is-flex-direction-row is-align-items-center"
+        >
+          <div class="py-1">
+            <div class="box">
+              <a href="/login" class="btn">로그인</a>
+            </div>
+          </div>
+          <div class="py-1">
+            <div class="box">
+              <a href="/register" class="btn">회원가입</a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="loggedin">로그인 되었음</div>
+        {% endif %} {% endblock %}
+      </nav>
     </header>
     <div class="container">
       <div class="divider"></div>

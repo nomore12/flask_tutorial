@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+
+<form action="/login">
+  <div>
+    <label for="email">로그인 이메일</label>
+    <input type="email" name="email" id="email" />
+  </div>
+  <div>
+    <label for="password">패스워드</label>
+    <input type="password" name="password" id="password" />
+  </div>
+  <div><input type="submit" value="로그인" /></div>
+</form>
+
+{% endblock %}
