@@ -50,6 +50,12 @@ def get_user(id):
     return user
 
 
+def get_user_by_email(email):
+    sql = f"SELECT * FROM user WHERE email = '{email}';"
+    user = cursor_to_dictionary(sql, False)
+    return user
+
+
 def get_all_articles():
     # left outer join. article의 user_id를 이용해서 글을 작성한 유저의 정보를 찾음.
     sql = "SELECT atc.id, usr.username, atc.title, atc.created_at FROM article atc LEFT OUTER JOIN user usr ON atc.user_id = usr.id;"

@@ -1,6 +1,18 @@
-{% extends 'base.html' %} {% block content %}
-
-<form action="/login">
+{% extends 'base.html' %} {% block content %} {% block login %}
+<div class="nav-item is-flex is-flex-direction-row is-align-items-center">
+  <div class="py-1">
+    <div class="box">
+      <a href="#" class="btn hidden"></a>
+    </div>
+  </div>
+  <div class="py-1">
+    <div class="box">
+      <a href="#" class="btn hidden"></a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+<form action="/login" method="post">
   <div>
     <label for="email">로그인 이메일</label>
     <input type="email" name="email" id="email" />

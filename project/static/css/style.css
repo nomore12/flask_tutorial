@@ -58,6 +58,38 @@
   align-items: center;
 }
 
+.is-flex-grow-1 {
+  flex-grow: 1;
+}
+
+.is-flex-grow-2 {
+  flex-grow: 2;
+}
+
+.is-flex-grow-3 {
+  flex-grow: 3;
+}
+
+.is-flex-grow-4 {
+  flex-grow: 4;
+}
+
+.is-flex-grow-5 {
+  flex-grow: 5;
+}
+
+.is-flex-grow-6 {
+  flex-grow: 6;
+}
+
+.is-flex-grow-7 {
+  flex-grow: 7;
+}
+
+.is-flex-grow-8 {
+  flex-grow: 8;
+}
+
 .dev-block {
   border: 1px solid lightcoral;
   width: 300px;
@@ -84,6 +116,13 @@
   text-decoration: none;
   color: inherit;
   font-weight: 500;
+}
+
+.hidden {
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+  cursor: default;
 }
 
 .link {

@@ -1,10 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-import sqlite3
-from query import get_all_articles, get_all_users, get_user, get_article, create_article, create_user
+from pathlib import Path
 from datetime import datetime
+import sqlite3
+
+from flask import Flask, render_template, request, redirect, url_for, session, current_app
+
+from query import get_all_articles, get_all_users, get_user, get_article, create_article, create_user, get_user_by_email
+from configs import dictConfig
 
 
 app = Flask(__name__)
+
+dictConfig
 
 
 @app.template_filter('today')
@@ -19,12 +25,13 @@ def http_404():
 
 @app.route('/')
 def index():
+    current_app.logger.debug(session.get('user', 'no user'))
     articles = get_all_articles()
-    if session.get("username", "") == "":
+    if session.get("user", "") == "":
         user = None
     else:
         try:
-            user = get_user(session.get('id', ''))
+            user = session.get("user", '')
         except Exception as e:
             return redirect(url_for('.http_404', context={'message': e}))
     context = {
@@ -35,9 +42,19 @@ def index():
     return render_template('list.html', context=context)
 
 
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    if request.method != 'POST':
+        return render_template('login.html')
+    email = request.form.get('email', '')
+    password = request.form.get('password', '')
+    user = get_user_by_email(email)
+    current_app.logger.debug(user, email, password)
+    if email != user.get('email', '') or password != user.get('password', ''):
+        print(email, password)
+        return render_template('login.html', context={'message': '이메일이나 패스워드를 다시 확인해 주세요.'})
+    session['user'] = user
+    return redirect(url_for('.index', context={"user": user}))
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -76,5 +93,8 @@ def write_article():
 
 
 if __name__ == '__main__':
-    app.debug = True
+    app.config.update(
+        DEBUG=True,
+        SECRET_KEY='secretkey',
+    )
     app.run()
