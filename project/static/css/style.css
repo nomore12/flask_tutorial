@@ -124,6 +124,16 @@
   font-weight: 500;
 }
 
+.toast {
+  color: red;
+  font-size: 2rem;
+  padding: 0.4rem 0.7rem;
+  border: 2px solid grey;
+  min-height: 2rem;
+  min-width: 16rem;
+  text-align: center;
+}
+
 .hidden {
   color: transparent;
   background-color: transparent;

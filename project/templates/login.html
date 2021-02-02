@@ -9,7 +9,12 @@
   </div>
 </div>
 
-{% endblock %} {% block content %}
+{% endblock %} {% block content %} {% if context.message %}
+<div class="toast">{{ context.message }}</div>
+{% else %}
+<div class="toast hidden"></div>
+{% endif %}
+
 <form action="/login" method="post">
   <div>
     <label for="email">로그인 이메일</label>

@@ -45,16 +45,15 @@ def index():
 def login():
     current_app.logger.debug(f"request method i]s: {request.method}")
     if request.method != 'POST':
-        return render_template('login.html')
+        return render_template('login.html', context={'message': None})
     email = request.form.get('email', '')
     password = request.form.get('password', '')
     user = get_user_by_email(email)
-    current_app.logger.debug(f"{str(user)}, {email}, {password}")
-    if email != user.get('email', '') or password != user.get('password', ''):
-        return render_template('login.html', context={'message': '이메일이나 패스워드를 다시 확인해 주세요.'})
+    if (user is None) or email != user.get('email', '') or password != user.get('password', ''):
+        return render_template('login.html', context={"message": "로그인 이메일이나 패스워드를 다시 확인해주세요."})
     session['user'] = user
     current_app.logger.debug(f"로그인 한 유저의 이름은 {user.get('username', '')}입니다.")
-    # return render_template('list.html', context={"user": user})
+    # 로그인 성공 화면으로 바꿔야 함.
     return redirect(url_for('.index'))
 
 
@@ -64,21 +63,22 @@ def logout():
         return redirect(url_for(('.index'), context={'user': None}))
     session.pop('user')
     current_app.logger.debug(str(session.get('user', '로그인 된 유저가 없습니다.')))
+    # 로그아웃 성공 화면으로 바꿔야 함
     return redirect(url_for(('.index')))
 
 
 @ app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method != 'POST':
-        return render_template('register.html', context={})
+        return render_template('register.html', context={"message": None})
     username = request.form.get('username', '').strip()
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '').strip()
     password2 = request.form.get('password-confirm', '').strip()
     if username == '' or email == '' or password == '' or password2 == '':
-        return render_template('register.html')
+        return render_template('register.html', context={"message": "아이디, 이메일, 패스워드는 모두 입력되어야 합니다."})
     if password != password2:
-        return render_template('register.html')
+        return render_template('register.html', context={"message": "패스워드는 동일하게 입력해야 합니다."})
     create_user(username, email, password)
     return redirect(url_for('.index'))
 

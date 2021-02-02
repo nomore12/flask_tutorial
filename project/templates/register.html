@@ -7,7 +7,12 @@
     <div href="/logout" class="btn hidden"></div>
   </div>
 </div>
-{% endblock %} {% block content %}
+{% endblock %} {% block content %} {% if context.message %}
+<div class="toast">{{ context.message }}</div>
+{% else %}
+<div class="toast hidden"></div>
+{% endif %}
+
 <form action="" method="POST">
   <div>
     <label for="username">닉네임</label>

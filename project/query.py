@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime
 from flask import current_app
-
+from configs import dictConfig
 '''
     cursor란...
     A database cursor is an identifier associated with a group of rows. It is, in a sense, a pointer to the current row in a buffer.
@@ -25,6 +25,8 @@ def cursor_to_dictionary(query, many=True):
     result = []
     if many:
         content = cursor.fetchall()
+        if content is None:
+            return None
         for row in content:
             data = {}
             # list loop에서 인덱스도 함께 쓰고 싶을때 index, value 형태로 쓰면 됨.
@@ -33,6 +35,8 @@ def cursor_to_dictionary(query, many=True):
             result.append(data)
     else:
         content = cursor.fetchone()
+        if content is None:
+            return None
         result = dict(content)
     conn.close()
     return result
