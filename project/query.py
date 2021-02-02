@@ -80,7 +80,6 @@ def create_user(username, email, password):
     # VALUES('{username}', '{email}', '{password}', '{now}'); "
     sql = "INSERT INTO user (username, email, password, created_at) \
         VALUES (?, ?, ?, ?);"
-    current_app.logger.debug(sql)
     # 데이터베이스에 접속
     conn = sqlite3.connect('database.db')
     # 데이터베이스의 커서를 생성. 커서에 sql문을 삽입 후 데이터베이스 커넥션에서 커서의 sql문을 커밋(실행)

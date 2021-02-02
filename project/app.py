@@ -25,7 +25,6 @@ def http_404():
 
 @app.route('/')
 def index():
-    # current_app.logger.debug(session.get('user', 'no user'))
     articles = get_all_articles()
     if session.get("user", "") == "":
         user = None
@@ -64,7 +63,7 @@ def logout():
     if session.get('user', '') == '':
         return redirect(url_for(('.index'), context={'user': None}))
     session.pop('user')
-    current_app.logger.debug(session.get('user', '로그인 된 유저가 없습니다.'))
+    current_app.logger.debug(str(session.get('user', '로그인 된 유저가 없습니다.')))
     return redirect(url_for(('.index')))
 
 
