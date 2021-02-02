@@ -38,8 +38,14 @@
   padding: 15px 10px;
 }
 
-.is-flex {
+.is-flex-row {
   display: flex;
+  flex-direction: row;
+}
+
+.is-flex-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .is-flex-direction-row {

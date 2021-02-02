@@ -1,17 +1,15 @@
-{% extends 'base.html' %} {% block content %} {% block login %}
-<div class="nav-item is-flex is-flex-direction-row is-align-items-center">
+{% extends 'base.html' %} {% block login %}
+
+<div class="nav-item is-flex-row is-align-items-center hidden">
   <div class="py-1">
-    <div class="box">
-      <a href="#" class="btn hidden"></a>
-    </div>
+    <div href="/profile" class="btn hidden"></div>
   </div>
   <div class="py-1">
-    <div class="box">
-      <a href="#" class="btn hidden"></a>
-    </div>
+    <div href="/logout" class="btn hidden"></div>
   </div>
 </div>
-{% endblock %}
+
+{% endblock %} {% block content %}
 <form action="/login" method="post">
   <div>
     <label for="email">로그인 이메일</label>
@@ -23,5 +21,4 @@
   </div>
   <div><input type="submit" value="로그인" /></div>
 </form>
-
-{% endblock %}
+{% endblock %} {% block bottom_nav %} {% endblock %}

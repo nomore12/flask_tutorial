@@ -20,7 +20,7 @@
   <body>
     <header class="header">
       <nav
-        class="navbar container is-flex is-flex-direction-row is-justify-content-space-between"
+        class="navbar container is-flex-row is-justify-content-space-between"
       >
         <div class="nav-item is-align-items-center">
           <div class="logo-wrapper">
@@ -30,42 +30,50 @@
             />
           </div>
         </div>
-        <div class="nav-item is-flex is-align-items-center">
+        <div class="nav-item is-flex-row is-align-items-center">
           <p class="center-logo font-size-4 font-weight-600">
             <a href="/" class="link">I WANT TO BELIEVE</a>
           </p>
         </div>
-        {% block login %} {% if context.user == None %}
-        <div
-          class="nav-item is-flex is-flex-direction-row is-align-items-center"
-        >
-          <div class="py-1">
-            <div class="box">
-              <a href="/login" class="btn">로그인</a>
+        {% block login %} {% if context.user %}
+        <div id="user_profile_wrapper">
+          <div class="nav-item is-flex-row is-align-items-center">
+            <div class="py-1">
+              <a href="/profile" class="btn">{{ context.user.username }}</a>
             </div>
-          </div>
-          <div class="py-1">
-            <div class="box">
-              <a href="/register" class="btn">회원가입</a>
+            <div class="py-1">
+              <a href="/logout" class="btn">로그아웃</a>
             </div>
           </div>
         </div>
+
         {% else %}
-        <div class="nav-item">로그인 되었음</div>
+
+        <div class="nav-item is-flex-row is-align-items-center">
+          <div class="py-1">
+            <a href="login" class="btn">로그인</a>
+          </div>
+          <div class="py-1">
+            <a href="/register" class="btn">회원가입</a>
+          </div>
+        </div>
+
         {% endif %} {% endblock %}
       </nav>
     </header>
+
     <div class="container">
       <div class="divider"></div>
       <div class="content">
         <div class="body">
           <div class="content">{% block content %} {% endblock %}</div>
           {% block bottom_nav %}
-          <div class="bottom-nav">
-            <div class="empty nav-item"></div>
+          <div
+            class="bottom-nav is-flex-row is-justify-content-space-between is-align-items-center"
+          >
+            <a href="#" class="btn">다음 페이지</a>
             <div class="pagenation nav-item">123456</div>
-            <div class="create nav-item"></div>
-            <a href="/edit" class="create-article">글쓰기</a>
+            <a href="/edit" class="btn">글쓰기</a>
           </div>
           {% endblock %}
         </div>

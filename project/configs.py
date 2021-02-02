@@ -13,7 +13,7 @@ dictConfig({
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': f"{Path(__file__).resolve().parent}/logs/board.log",
-            'maxBytes': 1024 * 1024 * 5,    # 2^2 - 4^2 - 16^2
+            'maxBytes': 1024 * 1024 * 5,
             'backupCount': 5,
             'formatter': 'default',
         },

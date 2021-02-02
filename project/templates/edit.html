@@ -1,5 +1,14 @@
-{% extends 'base.html' %} {% block title %} 글쓰기 {% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %} 글쓰기 {% endblock %} {% block login
+%}
+<div class="nav-item is-flex-row is-align-items-center hidden">
+  <div class="py-1">
+    <div href="/profile" class="btn hidden"></div>
+  </div>
+  <div class="py-1">
+    <div href="/logout" class="btn hidden"></div>
+  </div>
+</div>
+{% endblock %} {% block content %}
 <form action="/create" method="post">
   <input
     type="text"
@@ -19,4 +28,4 @@ content %}
   <div><input type="submit" value="글쓰기" /></div>
 </form>
 
-{% endblock %}
+{% endblock %} {% block bottom_nav %}{% endblock %}

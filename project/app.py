@@ -1,6 +1,8 @@
 from pathlib import Path
 from datetime import datetime
 import sqlite3
+from pprint import pprint
+import json
 
 from flask import Flask, render_template, request, redirect, url_for, session, current_app
 
@@ -9,8 +11,6 @@ from configs import dictConfig
 
 
 app = Flask(__name__)
-
-dictConfig
 
 
 @app.template_filter('today')
@@ -25,7 +25,7 @@ def http_404():
 
 @app.route('/')
 def index():
-    current_app.logger.debug(session.get('user', 'no user'))
+    # current_app.logger.debug(session.get('user', 'no user'))
     articles = get_all_articles()
     if session.get("user", "") == "":
         user = None
@@ -44,23 +44,34 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    current_app.logger.debug(f"request method i]s: {request.method}")
     if request.method != 'POST':
         return render_template('login.html')
     email = request.form.get('email', '')
     password = request.form.get('password', '')
     user = get_user_by_email(email)
-    current_app.logger.debug(user, email, password)
+    current_app.logger.debug(f"{str(user)}, {email}, {password}")
     if email != user.get('email', '') or password != user.get('password', ''):
-        print(email, password)
         return render_template('login.html', context={'message': '이메일이나 패스워드를 다시 확인해 주세요.'})
     session['user'] = user
-    return redirect(url_for('.index', context={"user": user}))
+    current_app.logger.debug(f"로그인 한 유저의 이름은 {user.get('username', '')}입니다.")
+    # return render_template('list.html', context={"user": user})
+    return redirect(url_for('.index'))
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/logout')
+def logout():
+    if session.get('user', '') == '':
+        return redirect(url_for(('.index'), context={'user': None}))
+    session.pop('user')
+    current_app.logger.debug(session.get('user', '로그인 된 유저가 없습니다.'))
+    return redirect(url_for(('.index')))
+
+
+@ app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method != 'POST':
-        return render_template('register.html')
+        return render_template('register.html', context={})
     username = request.form.get('username', '').strip()
     email = request.form.get('email', '').strip()
     password = request.form.get('password', '').strip()
@@ -73,20 +84,26 @@ def register():
     return redirect(url_for('.index'))
 
 
-# 유저는 무조건 1번. 하드코딩.
 @ app.route('/edit')
 def write_article_page():
-    return render_template('edit.html', context=get_user(1))
+    if session.get('user', '') == '':
+        return redirect(url_for('.index'))
+    user = session.get('user', '')
+    return render_template('edit.html', context=user)
 
 
-# 1번 유저만 글 쓸 수 있음.
 @ app.route('/create', methods=['POST', ])
 def write_article():
     if request.method != 'POST':
         return redirect(url_for('.create'))
+
     user_id = request.form['user_id']
-    title = request.form['title']
-    content = request.form['content']
+    title = request.form.get('title', '')
+    current_app.logger.debug(f"article title is {title}")
+
+    content = request.form.get('content', '')
+    current_app.logger.debug(f"article content is {content}")
+
     create_article(user_id, title, content)
 
     return redirect(url_for('.index'))

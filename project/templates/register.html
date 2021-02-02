@@ -1,4 +1,13 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block login %}
+<div class="nav-item is-flex-row is-align-items-center hidden">
+  <div class="py-1">
+    <div href="/profile" class="btn hidden"></div>
+  </div>
+  <div class="py-1">
+    <div href="/logout" class="btn hidden"></div>
+  </div>
+</div>
+{% endblock %} {% block content %}
 <form action="" method="POST">
   <div>
     <label for="username">닉네임</label>

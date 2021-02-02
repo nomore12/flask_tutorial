@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-
+from flask import current_app
 
 '''
     cursor란...
@@ -76,32 +76,40 @@ def create_user(username, email, password):
     print(username, email, password)
     # 현재 시간을 문자열로 변환. "2021-01-30 12:53:37" 형태로 변환
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    sql = f"INSERT INTO user (username, email, password, created_at) \
-        VALUES ('{username}', '{email}', '{password}', '{now}');"
-
+    # sql = f"INSERT INTO user (username, email, password, created_at) \
+    # VALUES('{username}', '{email}', '{password}', '{now}'); "
+    sql = "INSERT INTO user (username, email, password, created_at) \
+        VALUES (?, ?, ?, ?);"
+    current_app.logger.debug(sql)
     # 데이터베이스에 접속
     conn = sqlite3.connect('database.db')
     # 데이터베이스의 커서를 생성. 커서에 sql문을 삽입 후 데이터베이스 커넥션에서 커서의 sql문을 커밋(실행)
     cursor = conn.cursor()
     # query를 실행한다.
-    cursor.execute(sql)
+    cursor.execute(sql, (username, email, password, now))
     # 실행한 쿼리를 적용한다.
     conn.commit()
     # 데이터베이스를 닫는다.
     conn.close()
 
 
+"""
+SQLite가 역슬래시 이스케이프를 지원하지 않아서 그렇습니다.
+"'작은따옴표"처럼 큰따옴표와 작은따옴표를 그때그때 잘 바꿔 쓰거나, '''escaped' 처럼 ''로 이스케이프하거나, c.execute("UPDATE table SET column = ? WHERE other_column = ?", (100, "'escaped")) 처럼 파라미터화된 쿼리를 쓰세요.
+"""
+
+
 # create_user와 동일
 def create_article(user_id, title, content):
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    sql = f"INSERT INTO article (user_id, title, content, created_at) VALUES ((SELECT id FROM user WHERE id={user_id}), '{title}', '{content}', '{now}');"
+    sql = "INSERT INTO article (user_id, title, content, created_at) VALUES ((SELECT id FROM user WHERE id=?), ?, ?, ?);"
 
     # 데이터베이스에 접속
     conn = sqlite3.connect('database.db')
     # 데이터베이스의 커서를 생성. 커서에 sql문을 삽입 후 데이터베이스 커넥션에서 커서의 sql문을 커밋(실행)
     cursor = conn.cursor()
     # query를 실행한다.
-    cursor.execute(sql)
+    cursor.execute(sql, (user_id, title, content, now))
     # 실행한 쿼리를 적용한다.
     conn.commit()
     # 데이터베이스를 닫는다.
