@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>{{ name }}</h1>
-    <h2>{{ birth }}</h2>
-</body>
-</html>
+{% extends 'base.html' %} {% block content %}
+
+<div class="section">자유게시판</div>
+<div class="is-flex is-justify-content-space-around">
+  <h1>{{context.article.title}}</h1>
+  <div class="is-flex-ailgn-items section">{{context.article.username}}</div>
+  <div class="is-flex-ailgn-items section">{{ context.article.created_at }}</div>
+</div>
+<div class="section">
+    <p>
+        {{context.article.content|replace('\n', '<br/>')}}</div>
+    </p>
+
+{% endblock %}
+{% block bottom_nav %} {% endblock %}

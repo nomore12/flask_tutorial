@@ -1,31 +1,30 @@
-{% extends 'base.html' %} {% block title %} 글쓰기 {% endblock %} {% block login
-%}
-<div class="nav-item is-flex-row is-align-items-center hidden">
-  <div class="py-1">
-    <div href="/profile" class="btn hidden"></div>
-  </div>
-  <div class="py-1">
-    <div href="/logout" class="btn hidden"></div>
-  </div>
-</div>
-{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block javascript %}
+<script defer src="{{ url_for('static', filename='js/edit.js') }}"></script>
+{% endblock %} {% block title %} 글쓰기 {% endblock %} {% block content %}
 <form action="/create" method="post">
   <input
     type="text"
     name="user_id"
     id="user_id"
     hidden
-    value="{{context.id}}"
+    value="{{context.user.id}}"
   />
   <div>
     <label for="title">제목</label>
-    <input type="text" name="title" id="title" maxlength="256" />
+    <input required type="text" name="title" id="title" maxlength="256" />
   </div>
   <div>
     <label class="form-content-text" for="content">본문</label>
-    <input type="text" name="content" id="content" />
+    <input
+      minlength="16"
+      wrap="hard"
+      required
+      type="textarea"
+      name="content"
+      id="content"
+    />
   </div>
   <div><input type="submit" value="글쓰기" /></div>
 </form>
 
-{% endblock %} {% block bottom_nav %}{% endblock %}
+{% endblock %} {% block bottom_nav %} {% endblock %}

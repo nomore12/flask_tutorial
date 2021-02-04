@@ -3,6 +3,7 @@ from datetime import datetime
 import sqlite3
 from pprint import pprint
 import json
+from datetime import timedelta
 
 from flask import Flask, render_template, request, redirect, url_for, session, current_app
 
@@ -11,6 +12,12 @@ from configs import dictConfig
 
 
 app = Flask(__name__)
+
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
 
 
 @app.template_filter('today')
@@ -25,25 +32,32 @@ def http_404():
 
 @app.route('/')
 def index():
+    current_app.logger.debug(str(session.get('user', '없음')))
+    current_app.logger.debug(f"list session: {str(session)}")
     articles = get_all_articles()
-    if session.get("user", "") == "":
-        user = None
-    else:
-        try:
-            user = session.get("user", '')
-        except Exception as e:
-            return redirect(url_for('.http_404', context={'message': e}))
+    user = session.get('user', '')
     context = {
         'user': user,
         'articles': articles,
-        'users': get_all_users(),
     }
     return render_template('list.html', context=context)
 
 
+@app.route('/article/<id>')
+def article_detail(id):
+    current_app.logger.debug(f"edit session: {str(session)}")
+    article = get_article(id)
+    article['content'] = article['content'].replace('\n', '<br>')
+    user = session.get('user', '')
+    if user == '':
+        current_app.logger.debug('로그인 되어있는 유저가 없습니다.')
+        return redirect(url_for('.login'))
+    return render_template('detail.html', context={'article': article})
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    current_app.logger.debug(f"request method i]s: {request.method}")
+    current_app.logger.debug(f"login session: {str(session)}")
     if request.method != 'POST':
         return render_template('login.html', context={'message': None})
     email = request.form.get('email', '')
@@ -59,6 +73,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    current_app.logger.debug(f"logout session: {str(session)}")
     if session.get('user', '') == '':
         return redirect(url_for(('.index'), context={'user': None}))
     session.pop('user')
@@ -69,6 +84,7 @@ def logout():
 
 @ app.route('/register', methods=['POST', 'GET'])
 def register():
+    current_app.logger.debug(f"register session: {str(session)}")
     if request.method != 'POST':
         return render_template('register.html', context={"message": None})
     username = request.form.get('username', '').strip()
@@ -83,28 +99,26 @@ def register():
     return redirect(url_for('.index'))
 
 
-@ app.route('/edit')
-def write_article_page():
+@ app.route('/edit/<id>')
+def write_article_page(id):
+    current_app.logger.debug(f"edit session: {str(session)}")
+
     if session.get('user', '') == '':
-        return redirect(url_for('.index'))
+        return redirect(url_for('.login'))
     user = session.get('user', '')
-    return render_template('edit.html', context=user)
+
+    return render_template('edit.html', context={'user': user})
 
 
-@ app.route('/create', methods=['POST', ])
+@app.route('/create', methods=['POST', ])
 def write_article():
+    current_app.logger.debug(f"create session: {str(session)}")
     if request.method != 'POST':
-        return redirect(url_for('.create'))
-
-    user_id = request.form['user_id']
-    title = request.form.get('title', '')
-    current_app.logger.debug(f"article title is {title}")
-
-    content = request.form.get('content', '')
-    current_app.logger.debug(f"article content is {content}")
-
-    create_article(user_id, title, content)
-
+        return redirect(url_for('.write_article'))
+    id = request.form.get('user_id', '')
+    title = request.form.get('title', '').strip()
+    content = request.form.get('content')
+    create_article(id, title, content)
     return redirect(url_for('.index'))
 
 

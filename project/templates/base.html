@@ -15,14 +15,13 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/colors.css') }}"
     />
+    {% block javascript %} {% endblock %}
     <title>{% block title %}게시판{% endblock %}</title>
   </head>
   <body>
     <header class="header">
-      <nav
-        class="navbar container is-flex-row is-justify-content-space-between"
-      >
-        <div class="nav-item is-align-items-center">
+      <nav class="container is-flex-row is-justify-content-space-between">
+        <div class="is-flex-row is-align-items-center">
           <div class="logo-wrapper">
             <img
               class="logo"
@@ -30,16 +29,28 @@
             />
           </div>
         </div>
-        <div class="nav-item is-flex-row is-align-items-center">
+        <div class="is-flex-row is-align-items-center">
           <p class="center-logo font-size-4 font-weight-600">
             <a href="/" class="link">I WANT TO BELIEVE</a>
           </p>
         </div>
-        {% block login %} {% if context.user %}
+        {% block login %} {% if context.user == '' %}
+
+        <div class="is-flex-row is-align-items-center">
+          <div class="py-1">
+            <a href="/login" class="btn">로그인</a>
+          </div>
+          <div class="py-1">
+            <a href="/register" class="btn">회원가입</a>
+          </div>
+        </div>
+
+        {% else %}
+
         <div id="user_profile_wrapper">
           <div class="nav-item is-flex-row is-align-items-center">
             <div class="py-1">
-              <a href="/profile" class="btn">{{ context.user.username }}</a>
+              <a href="/#" class="btn">{{ context.user.username }}</a>
             </div>
             <div class="py-1">
               <a href="/logout" class="btn">로그아웃</a>
@@ -47,36 +58,34 @@
           </div>
         </div>
 
-        {% else %}
-
-        <div class="nav-item is-flex-row is-align-items-center">
-          <div class="py-1">
-            <a href="login" class="btn">로그인</a>
-          </div>
-          <div class="py-1">
-            <a href="/register" class="btn">회원가입</a>
-          </div>
-        </div>
-
         {% endif %} {% endblock %}
       </nav>
     </header>
 
-    <div class="container">
-      <div class="divider"></div>
-      <div class="content">
-        <div class="body">
-          <div class="content">{% block content %} {% endblock %}</div>
-          {% block bottom_nav %}
-          <div
-            class="bottom-nav is-flex-row is-justify-content-space-between is-align-items-center"
-          >
-            <a href="#" class="btn">다음 페이지</a>
-            <div class="pagenation nav-item">123456</div>
-            <a href="/edit" class="btn">글쓰기</a>
-          </div>
-          {% endblock %}
+    <div class="container main-content">
+      <div id="category" class="navbar">
+        <a class="navbar-item">자유게시판</a>
+        <a class="navbar-item">자유게시판</a>
+        <a class="navbar-item">자유게시판</a>
+        <a class="navbar-item">자유게시판</a>
+        <a class="navbar-item">자유게시판</a>
+        <a class="navbar-item">자유게시판</a>
+      </div>
+      <div class="body">
+        <div class="content">{% block content %} {% endblock %}</div>
+        {% block bottom_nav %}
+        <div
+          class="bottom-nav is-flex-row is-justify-content-space-between is-align-items-center"
+        >
+          <a href="#" class="btn">다음 페이지</a>
+          <div class="pagenation nav-item">123456</div>
+          {% if context.user == '' %}
+          <a href="/edit/{{context.user.id}}" class="btn hidden"></a>
+          {% else %}
+          <a href="/edit/{{context.user.id}}" class="btn">글쓰기</a>
+          {% endif %}
         </div>
+        {% endblock %}
       </div>
     </div>
     <footer class="footer">footer</footer>

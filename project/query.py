@@ -62,16 +62,29 @@ def get_user_by_email(email):
 
 def get_all_articles():
     # left outer join. article의 user_id를 이용해서 글을 작성한 유저의 정보를 찾음.
-    sql = "SELECT atc.id, usr.username, atc.title, atc.created_at FROM article atc LEFT OUTER JOIN user usr ON atc.user_id = usr.id;"
+    # sql = "SELECT atc.id, usr.username, atc.title, atc.created_at \
+    #     FROM article atc \
+    #     LEFT OUTER JOIN user usr \
+    #     ON atc.user_id = usr.id; "
+    sql = "SELECT atc.id, usr.username, atc.title, atc.created_at \
+        FROM article atc \
+        INNER JOIN user usr \
+        ON atc.user_id = usr.id;"
     result = cursor_to_dictionary(sql)
     result = sorted(
         result, key=lambda e: e['id'], reverse=True
     )
+    print(result)
     return result
 
 
 def get_article(id):
-    sql = f"SELECT id, title, content, created_at, (SELECT id FROM user WHERE user_id = id) as user_id FROM article WHERE id = '{id}';"
+    # sql = f"SELECT id, title, content, created_at, (SELECT id FROM user WHERE user_id = id) as user_id FROM article WHERE id = '{id}';"
+    sql = f"SELECT art.id, art.title, art.content, art.created_at, art.user_id, usr.username \
+        FROM article as art \
+        INNER JOIN user as usr\
+        ON art.user_id = usr.id \
+        WHERE art.id = {id}; "
     article = cursor_to_dictionary(sql, False)
     return article
 
@@ -117,3 +130,6 @@ def create_article(user_id, title, content):
     conn.commit()
     # 데이터베이스를 닫는다.
     conn.close()
+
+
+# get_all_articles()
