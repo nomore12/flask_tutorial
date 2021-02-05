@@ -1,7 +1,10 @@
+import pymysql
+import pymysql.cursors
 import sqlite3
 from datetime import datetime
 from flask import current_app
 from configs import dictConfig
+
 '''
     cursor란...
     A database cursor is an identifier associated with a group of rows. It is, in a sense, a pointer to the current row in a buffer.
@@ -132,4 +135,32 @@ def create_article(user_id, title, content):
     conn.close()
 
 
-# get_all_articles()
+# # Connect to the database
+# connection = pymysql.connect(host='localhost',
+#                              user='flask',
+#                              password='1234',
+#                              database='flaskboard',
+#                              cursorclass=pymysql.cursors.DictCursor)
+
+
+# cursor = connection.cursor()
+# sql = """CREATE TABLE IF NOT EXISTS user(
+#     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+#     username varchar(256) UNIQUE,
+#     email varchar(256) UNIQUE NOT NULL,
+#     password varchar(512) NOT NULL,
+#     created_at DATETIME NOT NULL
+# );"""
+
+# cursor.execute(sql)
+# connection.commit()
+
+# sql = "INSERT INTO user (username, email, password, created_at) \
+#         VALUES ('nomore', 'nomore@naver.com', '1234', %s);"
+# cursor.execute(sql, (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+# connection.commit()
+
+# sql = 'SELECT * FROM user;'
+# cursor.execute(sql)
+# result = cursor.fetchall()
+# print(result)

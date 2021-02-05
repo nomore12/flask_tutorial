@@ -23,3 +23,11 @@ dictConfig({
         'handlers': ['file']
     }
 })
+
+db = {
+    'USER': 'flask',
+    'DATABASE': 'flaskboard',
+    'PASSWORD': '1234',
+    'PORT': '3306',
+    'HOST': 'localhost'
+}
